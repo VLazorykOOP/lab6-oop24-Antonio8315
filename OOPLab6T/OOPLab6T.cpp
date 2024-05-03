@@ -7,7 +7,6 @@
 
 // Ваші файли загловки 
 //
-
 class Base
 {
 protected:
@@ -17,6 +16,8 @@ public:
     Base() : dat(1) {}
     Base(int d) : dat(d) {}
 };
+
+//успадкування з елементами даних класів
 class D1 : protected Base
 {
 protected:
@@ -62,12 +63,14 @@ public:
     R(int d) : dt(d) {}
     R(int a, int b, int c, double d, double e, int f) : E1(a, b, c), E2(d, e, f), Base::Base(a), dt(f + 1.) {}
     void showDat()
-    {
+    {   
+        //попередження про помилку, що не впливає на компіляцію коду
         std::cout << "dat =? Error C2385 ambiguous access level dat " << std::endl;
+
         /// << dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << E1::D1::Base::dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << Base::dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << E2::D2::Base::dat << std::endl;
+        std::cout << "E1VV::D1V::Base::dat = " << E1::D1::Base::dat << std::endl;
+        std::cout << "Base::dat = " << Base::dat << std::endl;
+        std::cout << "E2VV::D2V::Base::dat = " << E2::D2::Base::dat << std::endl;
     }
 };
 
@@ -77,7 +80,7 @@ public:
 
 
 
-
+//віртуальне успадкування з елементами даних класів
 class D1V : virtual protected Base
 {
 protected:
@@ -124,29 +127,30 @@ public:
     RV(int a, int b, int c, double d, double e, int f) : E1V(a, b, c), E2V(d, e, f), Base::Base(a + 1), dt(f + 1.0) {}
     void showDat()
     {
+        //попередження про помилку, що не впливає на компіляцію коду
         std::cout << "dat =? Error C2385 ambiguous access level dat " << std::endl;
+
         /// << dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << E1V::D1V::Base::dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << Base::dat << std::endl;
-        std::cout << "B12VV::D1V::Base::dat = " << E2V::D2V::Base::dat << std::endl;
+        std::cout << "E1VV::D1V::Base::dat = " << E1V::D1V::Base::dat << std::endl;
+        std::cout << "Base::dat = " << Base::dat << std::endl;
+        std::cout << "E2VV::D2V::Base::dat = " << E2V::D2V::Base::dat << std::endl;
     }
 };
 
 
 
 
-
+//абстрактний базовий клас
 class Figure {
 public:
-    // Віртуальна функція для обчислення площі
+    //віртуальна функція для обчислення площі
     virtual double area() const = 0;
 
-    // Віртуальний деструктор для правильного виклику
-    // деструктора у похідних класах через вказівник на базовий клас
+    //віртуальний деструктор
     virtual ~Figure() {}
 };
 
-// Клас "Прямокутник", що успадковує "Фігура"
+//клас "Прямокутник", що успадковує "Фігура"
 class Rectangle : public Figure {
 private:
     double width;
@@ -154,26 +158,26 @@ private:
 public:
     Rectangle(double w, double h) : width(w), height(h) {}
 
-    // Реалізація віртуальної функції "area" для прямокутника
+    //реалізація віртуальної функції для прямокутника
     double area() const override {
         return width * height;
     }
 };
 
-// Клас "Коло", що успадковує "Фігура"
+//клас "Коло", що успадковує "Фігура"
 class Circle : public Figure {
 private:
     double radius;
 public:
     Circle(double r) : radius(r) {}
 
-    // Реалізація віртуальної функції "area" для кола
+    //реалізація віртуальної функції для кола
     double area() const override {
         return 3.14 * radius * radius;
     }
 };
 
-// Клас "Прямокутний трикутник", що успадковує "Фігура"
+//клас "Прямокутний трикутник", що успадковує "Фігура"
 class RightTriangle : public Figure {
 private:
     double base;
@@ -181,13 +185,13 @@ private:
 public:
     RightTriangle(double b, double h) : base(b), height(h) {}
 
-    // Реалізація віртуальної функції "area" для прямокутного трикутника
+    //реалізація віртуальної функції для прямокутного трикутника
     double area() const override {
         return 0.5 * base * height;
     }
 };
 
-// Клас "Трапеція", що успадковує "Фігура"
+//клас "Трапеція", що успадковує "Фігура"
 class Trapezoid : public Figure {
 private:
     double base1;
@@ -196,7 +200,7 @@ private:
 public:
     Trapezoid(double b1, double b2, double h) : base1(b1), base2(b2), height(h) {}
 
-    // Реалізація віртуальної функції "area" для трапеції
+    //реалізація віртуальної функції для трапеції
     double area() const override {
         return 0.5 * (base1 + base2) * height;
     }
@@ -258,6 +262,7 @@ public:
 };
 int main()
 {
+    //завдання 1
     std::cout << " Lab #6  !\n";
     R a, b(1, 2, 3, 4.5, 5.5, 6);
     RV av, bv(1, 2, 3, 4.5, 5.5, 6);
@@ -271,29 +276,32 @@ int main()
      std::cout << "Size for Base " << sizeof(Base) << std::endl;
      std::cout << "Size for D1V " << sizeof(D1V) << std::endl;
      std::cout << "Size for D2V " << sizeof(D2V) << std::endl;
-     std::cout << "Size for D12V " << sizeof(E1V) << std::endl;
-     std::cout << "Size for D12V " << sizeof(E2V) << std::endl;
+     std::cout << "Size for E1V " << sizeof(E1V) << std::endl;
+     std::cout << "Size for E2V " << sizeof(E2V) << std::endl;
      std::cout << "Size for RV " << sizeof(RV) << std::endl;
     std::cout << "Size for object class R " << sizeof(R) << " or "
         << sizeof(a) << " or " << sizeof(b) << std::endl;
-    std::cout << "Size for object class RV3 " << sizeof(RV) << " or "
+    std::cout << "Size for object class RV " << sizeof(RV) << " or "
         << sizeof(av) << " or " << sizeof(bv) << std::endl;
     b.showDat();
      bv.showDat();
      //  Код виконання завдань
      //  Головне меню завдань
      //  Функції та класи можуть знаходитись в інших файлах проекту
+
+     //завдання 2
      Rectangle rect(5, 10);
      Circle circle(7);
      RightTriangle triangle(3, 4);
      Trapezoid trapezoid(6, 8, 5);
      std::cout << "\n\n\nTask 2\n";
-     // Виклик функції "area" для кожної фігури
+     //виклик функції "area" для кожної фігури
      std::cout << "Area of Rectangle: " << rect.area() << std::endl;
      std::cout << "Area of Circle: " << circle.area() << std::endl;
      std::cout << "Area of Right Triangle: " << triangle.area() << std::endl;
      std::cout << "Area of Trapezoid: " << trapezoid.area() << std::endl;
 
+     //завдання 3
      std::cout << "\n\n\nTask 3\n";
      Student s1("Alice", 20, "University A");
      FamilyParent fp1("Bob", 40, 2);
